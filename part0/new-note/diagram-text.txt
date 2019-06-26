@@ -1,0 +1,23 @@
+title New notes
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new
+server -> browser: REDIRECT -> https://fullstack-exampleapp.herokuapp.com/notes
+browser-> server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server -> browser: HTML code
+browser-> server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+browser-> server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server -> browser: main.css
+server -> browser: main.js
+
+note over browser:
+the browser starts to run the js code
+requesting the data from the server
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server->browser: [{content: "New note", date: "2019-06-27"}, ...]
+
+note over browser:
+browser executes the event handler
+that renders the note
+end note
