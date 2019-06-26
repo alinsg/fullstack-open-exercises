@@ -1,0 +1,7 @@
+title Single Page Application Submit
+
+client->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over client:
+the browser adds the note to the page
+end note
