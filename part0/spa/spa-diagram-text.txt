@@ -1,0 +1,6 @@
+title Single Page Application
+
+client->server: Initial request
+server->client: HTML
+client->server: Asynchronous Javascript
+server->client: JSON Data
