@@ -1,6 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+const Header = props => <h1>{props.course}</h1>
+
+const Content = props =>
+  props.parts.map(part => <Part part={part} key={part.name} />)
+
+const Total = props =>
+  props.parts.reduce((sum, part) => {
+    return sum + part.exercises
+  }, 0)
+
+const Part = props => (
+  <p>
+    {props.part.name} {props.part.exercises}
+  </p>
+)
+
 const App = () => {
   const course = 'Half Stack application development'
   const parts = [
@@ -17,22 +33,6 @@ const App = () => {
       exercises: 14
     }
   ]
-
-  const Header = props => <h1>{props.course}</h1>
-
-  const Content = props =>
-    props.parts.map(part => <Part part={part} key={part.name} />)
-
-  const Total = props =>
-    props.parts.reduce((sum, part) => {
-      return sum + part.exercises
-    }, 0)
-
-  const Part = props => (
-    <p>
-      {props.part.name} {props.part.exercises}
-    </p>
-  )
 
   return (
     <div>
