@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import './App.css'
 import Numbers from './components/Numbers'
 import Form from './components/Form'
+import Header from './components/Header'
 
 const App = () => {
+  const [appTitle] = useState('Phonebook')
   const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
   const [newName, setNewName] = useState('')
 
@@ -30,7 +32,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <Header title={appTitle} />
       <Form onInputChange={handleInputChange} onFormSubmit={handleFormSubmit} />
       <Numbers persons={persons} />
     </div>
