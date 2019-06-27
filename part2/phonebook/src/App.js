@@ -6,16 +6,21 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
   const [newName, setNewName] = useState('')
 
-  const addPerson = person => {
+  const personAlreadyAdded = personToCheck =>
+    persons.some(person => person.name === personToCheck.name)
+
+  const addPersonName = newPersonName => {
     const newPerson = {
-      name: person
+      name: newPersonName
     }
-    setPersons([...persons, newPerson])
+    personAlreadyAdded(newPerson)
+      ? window.alert(`${newPerson.name} is already added`)
+      : setPersons([...persons, newPerson])
   }
 
   const handleFormSubmit = event => {
     event.preventDefault()
-    addPerson(newName)
+    addPersonName(newName)
   }
 
   const handleInputChange = event => {
