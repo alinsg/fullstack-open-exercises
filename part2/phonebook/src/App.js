@@ -6,16 +6,14 @@ import Header from './components/Header'
 
 const App = () => {
   const [appTitle] = useState('Phonebook')
-  const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const personAlreadyAdded = personToCheck =>
     persons.some(person => person.name === personToCheck.name)
 
-  const addPersonName = newPersonName => {
-    const newPerson = {
-      name: newPersonName
-    }
+  const addPerson = newPerson => {
     personAlreadyAdded(newPerson)
       ? window.alert(`${newPerson.name} is already added`)
       : setPersons([...persons, newPerson])
@@ -23,17 +21,29 @@ const App = () => {
 
   const handleFormSubmit = event => {
     event.preventDefault()
-    addPersonName(newName)
+    const person = {
+      name: newName,
+      number: newNumber
+    }
+    addPerson(person)
   }
 
-  const handleInputChange = event => {
+  const handleNameInputChange = event => {
     setNewName(event.target.value)
+  }
+
+  const handleNumberInputChange = event => {
+    setNewNumber(event.target.value)
   }
 
   return (
     <div>
       <Header title={appTitle} />
-      <Form onInputChange={handleInputChange} onFormSubmit={handleFormSubmit} />
+      <Form
+        onNameInputChange={handleNameInputChange}
+        onNumberInputChange={handleNumberInputChange}
+        onFormSubmit={handleFormSubmit}
+      />
       <Numbers persons={persons} />
     </div>
   )
