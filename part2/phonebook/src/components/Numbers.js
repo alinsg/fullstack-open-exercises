@@ -12,7 +12,6 @@ const Numbers = props => {
 
   return (
     <React.Fragment>
-      <h2>Numbers</h2>
       <div>{renderPersons()}</div>
     </React.Fragment>
   )

@@ -22,7 +22,6 @@ const Form = props => {
   const { onFormSubmit, onNameInputChange, onNumberInputChange } = props
   return (
     <form onSubmit={onFormSubmit}>
-      <h2>Add a new person</h2>
       <Input text='name: ' eventHandler={onNameInputChange} />
       <Input text='number: ' eventHandler={onNumberInputChange} />
       <Button type='submit' text='add' />

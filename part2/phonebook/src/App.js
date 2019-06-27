@@ -58,11 +58,13 @@ const App = () => {
     <div>
       <Header title={appTitle} />
       <Search onPersonSearch={handlePersonSearch} />
+      <h2>Add a new person</h2>
       <Form
         onNameInputChange={handleNameInputChange}
         onNumberInputChange={handleNumberInputChange}
         onFormSubmit={handleFormSubmit}
       />
+      <h2>Numbers</h2>
       {isSearching === false ? (
         <Numbers persons={persons} />
       ) : (
