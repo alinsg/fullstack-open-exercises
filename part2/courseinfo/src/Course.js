@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Header = props => <h1>{props.name}</h1>
+const Header = props => <h3>{props.name}</h3>
 
 const Content = props =>
-  props.parts.map(part => <Part part={part} key={part.name} />)
+  props.parts.map(part => <Part part={part} key={part.id} />)
 
 const Total = props => {
   const total = props.parts.reduce((sum, part) => {
