@@ -18,10 +18,15 @@ const App = () => {
       })
   }
 
+  const handleCountryDetails = event => {}
+
   return (
     <React.Fragment>
       <CountrySearchbar onCountryInputHandler={handleSearchbarInputChange} />
-      <Countries countriesToRender={countries} />
+      <Countries
+        countriesToRender={countries}
+        onDetailsClick={handleCountryDetails}
+      />
     </React.Fragment>
   )
 }

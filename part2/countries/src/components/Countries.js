@@ -1,4 +1,5 @@
 import React from 'react'
+import Country from './Country'
 
 const Countries = props => {
   const { countriesToRender } = props
@@ -18,7 +19,30 @@ const Countries = props => {
     </div>
   )
 
-  return <React.Fragment>{renderManyCountries()}</React.Fragment>
+  const renderSingleCountry = () => {
+    const { name, capital, population, languages, flag } = countriesToRender[0]
+    return (
+      <Country
+        name={name}
+        capital={capital}
+        population={population}
+        languages={languages}
+        flag={flag}
+      />
+    )
+  }
+
+  const countriesRender = () => {
+    return (
+      <div>
+        {countriesToRender.length === 1
+          ? renderSingleCountry()
+          : renderManyCountries()}
+      </div>
+    )
+  }
+
+  return <React.Fragment>{countriesRender()}</React.Fragment>
 }
 
 export default Countries
