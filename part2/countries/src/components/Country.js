@@ -13,7 +13,6 @@ const Country = props => {
       <p>population: {population}</p>
       <h2>languages</h2>
       <ul>{renderLanguages()}</ul>
-      {console.log(flag)}
       <img
         src={flag}
         alt={`${name}'s flag`}

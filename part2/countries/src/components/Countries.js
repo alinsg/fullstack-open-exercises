@@ -2,11 +2,16 @@ import React from 'react'
 import Country from './Country'
 
 const Countries = props => {
-  const { countriesToRender } = props
+  const { countriesToRender, onDetailsClick } = props
 
   const renderCountries = () =>
     countriesToRender.map(country => (
-      <p key={country.numericCode}>{country.name}</p>
+      <p key={country.numericCode}>
+        {country.name}{' '}
+        <span onClick={() => onDetailsClick(country)}>
+          <button>show</button>
+        </span>
+      </p>
     ))
 
   const renderManyCountries = () => (
