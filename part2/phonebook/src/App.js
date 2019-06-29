@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import numberService from './services/numbers'
 import './App.css'
 import Numbers from './components/Numbers'
 import Form from './components/Form'
@@ -9,15 +10,14 @@ import Search from './components/Search'
 const App = () => {
   const [appTitle] = useState('Phonebook')
   const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
+  const [personName, setPersonName] = useState('')
+  const [personNumber, setPersonNumber] = useState('')
   const [isSearching, setSearchingState] = useState(false)
   const [matchedPersons, setMatchedPersons] = useState()
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      console.log(response)
-      setPersons(response.data)
+    numberService.getAll().then(initialPersons => {
+      setPersons(initialPersons)
     })
   }, [])
 
@@ -27,24 +27,26 @@ const App = () => {
   const addPerson = newPerson => {
     personAlreadyAdded(newPerson)
       ? window.alert(`${newPerson.name} is already added`)
-      : setPersons([...persons, newPerson])
+      : numberService
+          .create(newPerson)
+          .then(newData => setPersons(persons.concat(newData)))
   }
 
   const handleFormSubmit = event => {
     event.preventDefault()
     const person = {
-      name: newName,
-      number: newNumber
+      name: personName,
+      number: personNumber
     }
     addPerson(person)
   }
 
   const handleNameInputChange = event => {
-    setNewName(event.target.value)
+    setPersonName(event.target.value)
   }
 
   const handleNumberInputChange = event => {
-    setNewNumber(event.target.value)
+    setPersonNumber(event.target.value)
   }
 
   const handlePersonSearch = event => {
