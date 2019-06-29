@@ -59,9 +59,12 @@ const App = () => {
   }
 
   const handleDeleteButtonClick = person => {
-    const { id } = person
-    numberService.remove(id).catch(err => console.log(err))
-    setPersons(persons.filter(person => person.id !== id))
+    const { id, name } = person
+    const confirmDialog = window.confirm(`Do you want to remove ${name}`)
+    if (confirmDialog) {
+      numberService.remove(id).catch(err => console.log(err))
+      setPersons(persons.filter(person => person.id !== id))
+    }
   }
 
   return (
