@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import CountrySearchbar from './components/CountrySearchbar'
@@ -6,18 +6,23 @@ import Countries from './components/Countries'
 import Country from './components/Country'
 
 const App = () => {
+  const [initialCountries, setInitialCountries] = useState()
   const [countries, setCountries] = useState([])
-  const [searchbarText, setSearchbarText] = useState()
   const [countryToRender, setCountryToRender] = useState()
   const [isCountryRendering, setIsCountryRendering] = useState(false)
 
+  useEffect(() => {
+    axios.get(`https://restcountries.eu/rest/v2/all`).then(response => {
+      setInitialCountries(response.data)
+    })
+  }, [])
+
   const handleSearchbarInputChange = event => {
-    setSearchbarText(event.target.value)
-    axios
-      .get(`https://restcountries.eu/rest/v2/name/${searchbarText}`)
-      .then(response => {
-        setCountries(response.data)
-      })
+    setCountries(
+      initialCountries.filter(country =>
+        country.name.toLowerCase().includes(event.target.value.toLowerCase())
+      )
+    )
   }
 
   const handleCountryDetails = country => {
