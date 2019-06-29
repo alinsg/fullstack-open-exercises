@@ -23,9 +23,29 @@ const App = () => {
   const personAlreadyAdded = personToCheck =>
     persons.some(person => person.name === personToCheck.name)
 
+  const updatePersonNumber = personToUpdate => {
+    const { name, number } = personToUpdate
+    const searchedPerson = persons.filter(person => person.name === name)[0]
+    const id = searchedPerson.id
+    if (number !== searchedPerson.number) {
+      const confirmDialog = window.confirm(
+        `${name} is already added to phonebook, replace the old number with a new one?`
+      )
+      if (confirmDialog) {
+        const newPerson = {
+          name: name,
+          number: personNumber,
+          id: id
+        }
+        numberService.update(id, newPerson)
+        numberService.getAll().then(newData => setPersons(newData))
+      }
+    }
+  }
+
   const addPerson = newPerson => {
     personAlreadyAdded(newPerson)
-      ? window.alert(`${newPerson.name} is already added`)
+      ? updatePersonNumber(newPerson)
       : numberService
           .create(newPerson)
           .then(newData => setPersons(persons.concat(newData)))
