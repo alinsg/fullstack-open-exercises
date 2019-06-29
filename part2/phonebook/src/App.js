@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import numberService from './services/numbers'
 import './App.css'
 import Numbers from './components/Numbers'
@@ -59,6 +58,12 @@ const App = () => {
     setMatchedPersons(searchedPeople)
   }
 
+  const handleDeleteButtonClick = person => {
+    const { id } = person
+    numberService.remove(id).catch(err => console.log(err))
+    setPersons(persons.filter(person => person.id !== id))
+  }
+
   return (
     <div>
       <Header title={appTitle} />
@@ -71,9 +76,15 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {isSearching === false ? (
-        <Numbers persons={persons} />
+        <Numbers
+          persons={persons}
+          onDeleteButtonClick={handleDeleteButtonClick}
+        />
       ) : (
-        <Numbers persons={matchedPersons} />
+        <Numbers
+          persons={matchedPersons}
+          onDeleteButtonClick={handleDeleteButtonClick}
+        />
       )}
     </div>
   )
