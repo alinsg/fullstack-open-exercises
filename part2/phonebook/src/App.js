@@ -18,6 +18,7 @@ const App = () => {
   useEffect(() => {
     numberService.getAll().then(personsFromDb => {
       setPersons(personsFromDb)
+      setUpdatePersonsFromDb(false)
     })
   }, [updatePersonsFromDb])
 
@@ -39,7 +40,7 @@ const App = () => {
           id: id
         }
         numberService.update(id, newPerson)
-        setUpdatePersonsFromDb(!updatePersonsFromDb)
+        setUpdatePersonsFromDb(true)
       }
     }
   }
@@ -47,9 +48,8 @@ const App = () => {
   const addPerson = newPerson => {
     personAlreadyAdded(newPerson)
       ? updatePersonNumber(newPerson)
-      : numberService
-          .create(newPerson)
-          .then(newData => setPersons(persons.concat(newData)))
+      : numberService.create(newPerson)
+    setUpdatePersonsFromDb(true)
   }
 
   const handleFormSubmit = event => {
