@@ -5,6 +5,7 @@ import Numbers from './components/Numbers'
 import Form from './components/Form'
 import Header from './components/Header'
 import Search from './components/Search'
+import Alert from './components/Alert'
 
 const App = () => {
   const [appTitle] = useState('Phonebook')
@@ -14,6 +15,7 @@ const App = () => {
   const [isSearching, setSearchingState] = useState(false)
   const [matchedPersons, setMatchedPersons] = useState()
   const [updatePersonsFromDb, setUpdatePersonsFromDb] = useState(false)
+  const [alert, setAlert] = useState()
 
   useEffect(() => {
     numberService.getAll().then(personsFromDb => {
@@ -40,15 +42,27 @@ const App = () => {
           id: id
         }
         numberService.update(id, newPerson)
+        setAlert('success')
+        setTimeout(() => {
+          setAlert(null)
+        }, 5000)
         setUpdatePersonsFromDb(true)
       }
     }
   }
 
+  const createNewPersonEntry = newPerson => {
+    numberService.create(newPerson)
+    setAlert('success')
+    setTimeout(() => {
+      setAlert(null)
+    }, 5000)
+  }
+
   const addPerson = newPerson => {
     personAlreadyAdded(newPerson)
       ? updatePersonNumber(newPerson)
-      : numberService.create(newPerson)
+      : createNewPersonEntry(newPerson)
     setUpdatePersonsFromDb(true)
   }
 
@@ -91,6 +105,11 @@ const App = () => {
   return (
     <div>
       <Header title={appTitle} />
+      {alert === 'success' ? (
+        <Alert name={personName} alertType={alert} />
+      ) : (
+        <React.Fragment />
+      )}
       <Search onPersonSearch={handlePersonSearch} />
       <h2>Add a new person</h2>
       <Form
