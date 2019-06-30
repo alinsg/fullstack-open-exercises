@@ -13,12 +13,13 @@ const App = () => {
   const [personNumber, setPersonNumber] = useState('')
   const [isSearching, setSearchingState] = useState(false)
   const [matchedPersons, setMatchedPersons] = useState()
+  const [updatePersonsFromDb, setUpdatePersonsFromDb] = useState(false)
 
   useEffect(() => {
-    numberService.getAll().then(initialPersons => {
-      setPersons(initialPersons)
+    numberService.getAll().then(personsFromDb => {
+      setPersons(personsFromDb)
     })
-  }, [])
+  }, [updatePersonsFromDb])
 
   const personAlreadyAdded = personToCheck =>
     persons.some(person => person.name === personToCheck.name)
@@ -34,11 +35,11 @@ const App = () => {
       if (confirmDialog) {
         const newPerson = {
           name: name,
-          number: personNumber,
+          number: number,
           id: id
         }
         numberService.update(id, newPerson)
-        numberService.getAll().then(newData => setPersons(newData))
+        setUpdatePersonsFromDb(!updatePersonsFromDb)
       }
     }
   }
