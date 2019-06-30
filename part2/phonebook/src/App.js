@@ -5,7 +5,8 @@ import Numbers from './components/Numbers'
 import Form from './components/Form'
 import Header from './components/Header'
 import Search from './components/Search'
-import Alert from './components/Alert'
+import AddAlert from './components/AddAlert'
+import DeleteAlert from './components/DeleteAlert'
 
 const App = () => {
   const [appTitle] = useState('Phonebook')
@@ -15,7 +16,8 @@ const App = () => {
   const [isSearching, setSearchingState] = useState(false)
   const [matchedPersons, setMatchedPersons] = useState()
   const [updatePersonsFromDb, setUpdatePersonsFromDb] = useState(false)
-  const [alert, setAlert] = useState()
+  const [alertType, setAlertType] = useState(false)
+  const [nameOfPersonToRemove, setNameOfPersonToRemove] = useState()
 
   useEffect(() => {
     numberService.getAll().then(personsFromDb => {
@@ -42,9 +44,9 @@ const App = () => {
           id: id
         }
         numberService.update(id, newPerson)
-        setAlert('success')
+        setAlertType('add')
         setTimeout(() => {
-          setAlert(null)
+          setAlertType(null)
         }, 5000)
         setUpdatePersonsFromDb(true)
       }
@@ -53,9 +55,9 @@ const App = () => {
 
   const createNewPersonEntry = newPerson => {
     numberService.create(newPerson)
-    setAlert('success')
+    setAlertType('add')
     setTimeout(() => {
-      setAlert(null)
+      setAlertType(null)
     }, 5000)
   }
 
@@ -97,19 +99,32 @@ const App = () => {
     const { id, name } = person
     const confirmDialog = window.confirm(`Do you want to remove ${name}`)
     if (confirmDialog) {
-      numberService.remove(id).catch(err => console.log(err))
+      numberService.remove(id).catch(err => {
+        console.log(err)
+      })
       setPersons(persons.filter(person => person.id !== id))
+      setNameOfPersonToRemove(name)
+      setAlertType('delete')
+      setTimeout(() => {
+        setAlertType(null)
+      }, 5000)
+    }
+  }
+
+  const renderAlerts = () => {
+    if (alertType === 'add') {
+      return <AddAlert name={personName} />
+    } else if (alertType === 'delete') {
+      return <DeleteAlert name={nameOfPersonToRemove} />
+    } else {
+      return <React.Fragment />
     }
   }
 
   return (
     <div>
       <Header title={appTitle} />
-      {alert === 'success' ? (
-        <Alert name={personName} alertType={alert} />
-      ) : (
-        <React.Fragment />
-      )}
+      {renderAlerts()}
       <Search onPersonSearch={handlePersonSearch} />
       <h2>Add a new person</h2>
       <Form
