@@ -5,8 +5,9 @@ import Numbers from './components/Numbers'
 import Form from './components/Form'
 import Header from './components/Header'
 import Search from './components/Search'
-import AddAlert from './components/AddAlert'
-import DeleteAlert from './components/DeleteAlert'
+import AddAlert from './components/Alerts/AddAlert'
+import DeleteAlert from './components/Alerts/DeleteAlert'
+import ErrorAlert from './components/Alerts/ErrorAlert'
 
 const App = () => {
   const [appTitle] = useState('Phonebook')
@@ -16,8 +17,9 @@ const App = () => {
   const [isSearching, setSearchingState] = useState(false)
   const [matchedPersons, setMatchedPersons] = useState()
   const [updatePersonsFromDb, setUpdatePersonsFromDb] = useState(false)
-  const [alertType, setAlertType] = useState(false)
+  const [alertType, setAlertType] = useState('none')
   const [nameOfPersonToRemove, setNameOfPersonToRemove] = useState()
+  const [errorText, setErrorText] = useState(null)
 
   useEffect(() => {
     numberService.getAll().then(personsFromDb => {
@@ -25,6 +27,12 @@ const App = () => {
       setUpdatePersonsFromDb(false)
     })
   }, [updatePersonsFromDb])
+
+  const timeout = () => {
+    setTimeout(() => {
+      setAlertType(null)
+    }, 5000)
+  }
 
   const personAlreadyAdded = personToCheck =>
     persons.some(person => person.name === personToCheck.name)
@@ -43,22 +51,24 @@ const App = () => {
           number: number,
           id: id
         }
-        numberService.update(id, newPerson)
+        numberService.update(id, newPerson).catch(error => {
+          createErrorAlert()
+          timeout()
+        })
         setAlertType('add')
-        setTimeout(() => {
-          setAlertType(null)
-        }, 5000)
+        timeout()
         setUpdatePersonsFromDb(true)
       }
     }
   }
 
   const createNewPersonEntry = newPerson => {
-    numberService.create(newPerson)
+    numberService.create(newPerson).catch(error => {
+      createErrorAlert()
+      timeout()
+    })
     setAlertType('add')
-    setTimeout(() => {
-      setAlertType(null)
-    }, 5000)
+    timeout()
   }
 
   const addPerson = newPerson => {
@@ -99,16 +109,20 @@ const App = () => {
     const { id, name } = person
     const confirmDialog = window.confirm(`Do you want to remove ${name}`)
     if (confirmDialog) {
-      numberService.remove(id).catch(err => {
-        console.log(err)
+      numberService.remove(id).catch(error => {
+        createErrorAlert()
+        timeout()
       })
       setPersons(persons.filter(person => person.id !== id))
       setNameOfPersonToRemove(name)
       setAlertType('delete')
-      setTimeout(() => {
-        setAlertType(null)
-      }, 5000)
+      timeout()
     }
+  }
+
+  const createErrorAlert = () => {
+    setAlertType('error')
+    setErrorText('Something went wrong')
   }
 
   const renderAlerts = () => {
@@ -116,6 +130,8 @@ const App = () => {
       return <AddAlert name={personName} />
     } else if (alertType === 'delete') {
       return <DeleteAlert name={nameOfPersonToRemove} />
+    } else if (alertType === 'error') {
+      return <ErrorAlert errorMessage={errorText} />
     } else {
       return <React.Fragment />
     }
