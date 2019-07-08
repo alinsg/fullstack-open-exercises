@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const config = require('../utils/config')
 
-const mongoUrl = process.env.MONGODB_URL
+const mongoUrl = config.MONGODB_URL
 mongoose.connect(mongoUrl, { useNewUrlParser: true })
 
 const blogSchema = mongoose.Schema({
