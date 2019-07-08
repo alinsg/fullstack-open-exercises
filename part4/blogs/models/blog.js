@@ -1,14 +1,24 @@
 const mongoose = require('mongoose')
 const config = require('../utils/config')
 
-const mongoUrl = config.MONGODB_URL
-mongoose.connect(mongoUrl, { useNewUrlParser: true })
-
 const blogSchema = mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
+  title: {
+    type: String,
+    required: true,
+    minlength: 3
+  },
+  author: {
+    type: String,
+    required: true,
+    minlength: 3
+  },
+  url: {
+    type: String,
+    required: true
+  },
+  likes: {
+    type: Number
+  }
 })
 
 module.exports = mongoose.model('Blog', blogSchema)
