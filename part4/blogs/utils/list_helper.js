@@ -1,6 +1,10 @@
+const _ = require('lodash')
+
 const dummy = blogs => {
   return 1
 }
+
+const lastListElement = list => list[list.length - 1]
 
 const totalLikes = blogs => {
   const reducer = (accumulator, currentValue) =>
@@ -9,23 +13,43 @@ const totalLikes = blogs => {
 }
 
 const favoriteBlog = blogs => {
-  let blogToReturn = { likes: 0 }
   if (blogs.length === 0) {
-    return {
-      error: 'blog list is empty, try adding one'
-    }
+    return { error: 'blog list is empty, try adding one' }
   } else {
-    blogs.map(blog => {
-      if (blog.likes >= blogToReturn.likes) {
-        blogToReturn = blog
-      }
-    })
+    return lastListElement(
+      _.sortBy(blogs, blog => {
+        return blog.likes
+      })
+    )
   }
-  return blogToReturn
+}
+
+const mostBlogs = blogs => {
+  if (blogs.length === 0) {
+    return { error: 'blog list is empty, try adding one' }
+  }
+  const uniqueBlogs = _.uniqBy(blogs, 'author').map(blog => {
+    const object = {
+      author: blog.author
+    }
+    object.blogs = 0
+    return object
+  })
+  _.forEach(blogs, function(blog) {
+    _.map(uniqueBlogs, function(o) {
+      o.author === blog.author ? (o.blogs = o.blogs + 1) : o
+    })
+  })
+  return lastListElement(
+    _.sortBy(uniqueBlogs, blog => {
+      return blog.blogs
+    })
+  )
 }
 
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }

@@ -53,6 +53,25 @@ const blogs = [
     __v: 0
   }
 ]
+const emptyBlogsList = []
+const singleBlogList = [
+  {
+    _id: '5a422a851b54a676234d17f7',
+    title: 'React patterns',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
+    likes: 7,
+    __v: 0
+  }
+]
+const singleBlog = {
+  _id: '5a422a851b54a676234d17f7',
+  title: 'React patterns',
+  author: 'Michael Chan',
+  url: 'https://reactpatterns.com/',
+  likes: 7,
+  __v: 0
+}
 
 test('dummy returns one', () => {
   const blogs = []
@@ -62,21 +81,10 @@ test('dummy returns one', () => {
 
 describe('total likes', () => {
   test('of an empty object list is 0', () => {
-    const emptyBlogsList = []
     const result = listHelper.totalLikes(emptyBlogsList)
     expect(result).toBe(0)
   })
   test('when list has only one blog to be the same as the blog likes', () => {
-    const singleBlogList = [
-      {
-        _id: '5a422a851b54a676234d17f7',
-        title: 'React patterns',
-        author: 'Michael Chan',
-        url: 'https://reactpatterns.com/',
-        likes: 7,
-        __v: 0
-      }
-    ]
     const result = listHelper.totalLikes(singleBlogList)
     expect(result).toBe(7)
   })
@@ -88,35 +96,16 @@ describe('total likes', () => {
 
 describe('favorite blog', () => {
   test('from an empty blog list should return an error object', () => {
-    const emptyBlogsList = []
     const result = listHelper.favoriteBlog(emptyBlogsList)
     expect(result).toEqual({ error: 'blog list is empty, try adding one' })
   })
   test('from a single blog list should be the blog itself', () => {
-    const singleBlogList = [
-      {
-        _id: '5a422a851b54a676234d17f7',
-        title: 'React patterns',
-        author: 'Michael Chan',
-        url: 'https://reactpatterns.com/',
-        likes: 7,
-        __v: 0
-      }
-    ]
-    const singleBlog = {
-      _id: '5a422a851b54a676234d17f7',
-      title: 'React patterns',
-      author: 'Michael Chan',
-      url: 'https://reactpatterns.com/',
-      likes: 7,
-      __v: 0
-    }
     const result = listHelper.favoriteBlog(singleBlogList)
     expect(result).toEqual(singleBlog)
   })
   test('from a list of many blogs should be the one with most likes', () => {
     const result = listHelper.favoriteBlog(blogs)
-    const singleBlog = {
+    const correctBlog = {
       _id: '5a422b3a1b54a676234d17f9',
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
@@ -124,6 +113,26 @@ describe('favorite blog', () => {
       likes: 12,
       __v: 0
     }
+    listHelper.mostBlogs(blogs)
+    expect(result).toEqual(correctBlog)
+  })
+})
+
+describe('author with most blogs written', () => {
+  test('from an empty blog list should be an error object', () => {
+    const result = listHelper.mostBlogs(emptyBlogsList)
+    expect(result).toEqual({ error: 'blog list is empty, try adding one' })
+  })
+  test('from a single blog list should be the blog itself', () => {
+    const result = listHelper.favoriteBlog(singleBlogList)
     expect(result).toEqual(singleBlog)
+  })
+  test('from a list with many blogs should be the correct one', () => {
+    const result = listHelper.mostBlogs(blogs)
+    const correctResult = {
+      author: 'Robert C. Martin',
+      blogs: 3
+    }
+    expect(result).toEqual(correctResult)
   })
 })
