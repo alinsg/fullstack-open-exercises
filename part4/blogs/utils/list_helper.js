@@ -8,7 +8,24 @@ const totalLikes = blogs => {
   return blogs.length === 0 ? 0 : blogs.reduce(reducer, 0)
 }
 
+const favoriteBlog = blogs => {
+  let blogToReturn = { likes: 0 }
+  if (blogs.length === 0) {
+    return {
+      error: 'blog list is empty, try adding one'
+    }
+  } else {
+    blogs.map(blog => {
+      if (blog.likes >= blogToReturn.likes) {
+        blogToReturn = blog
+      }
+    })
+  }
+  return blogToReturn
+}
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 }

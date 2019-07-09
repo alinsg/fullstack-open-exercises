@@ -85,3 +85,45 @@ describe('total likes', () => {
     expect(result).toBe(36)
   })
 })
+
+describe('favorite blog', () => {
+  test('from an empty blog list should return an error object', () => {
+    const emptyBlogsList = []
+    const result = listHelper.favoriteBlog(emptyBlogsList)
+    expect(result).toEqual({ error: 'blog list is empty, try adding one' })
+  })
+  test('from a single blog list should be the blog itself', () => {
+    const singleBlogList = [
+      {
+        _id: '5a422a851b54a676234d17f7',
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 7,
+        __v: 0
+      }
+    ]
+    const singleBlog = {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0
+    }
+    const result = listHelper.favoriteBlog(singleBlogList)
+    expect(result).toEqual(singleBlog)
+  })
+  test('from a list of many blogs should be the one with most likes', () => {
+    const result = listHelper.favoriteBlog(blogs)
+    const singleBlog = {
+      _id: '5a422b3a1b54a676234d17f9',
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 12,
+      __v: 0
+    }
+    expect(result).toEqual(singleBlog)
+  })
+})
