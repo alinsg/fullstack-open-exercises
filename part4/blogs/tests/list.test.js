@@ -123,9 +123,13 @@ describe('author with most blogs written', () => {
     const result = listHelper.mostBlogs(emptyBlogsList)
     expect(result).toEqual({ error: 'blog list is empty, try adding one' })
   })
-  test('from a single blog list should be the blog itself', () => {
-    const result = listHelper.favoriteBlog(singleBlogList)
-    expect(result).toEqual(singleBlog)
+  test('from a single blog list should be the author with one blog', () => {
+    const correctResult = {
+      author: 'Michael Chan',
+      blogs: 1
+    }
+    const result = listHelper.mostBlogs(singleBlogList)
+    expect(result).toEqual(correctResult)
   })
   test('from a list with many blogs should be the correct one', () => {
     const result = listHelper.mostBlogs(blogs)
@@ -133,6 +137,29 @@ describe('author with most blogs written', () => {
       author: 'Robert C. Martin',
       blogs: 3
     }
+    expect(result).toEqual(correctResult)
+  })
+})
+
+describe('most liked blog', () => {
+  test('from an empty blog list should be an error object', () => {
+    const result = listHelper.mostLikes(emptyBlogsList)
+    expect(result).toEqual({ error: 'blog list is empty, try adding one' })
+  })
+  test('from a single blog list should be the blog itself', () => {
+    const correctResult = {
+      author: 'Michael Chan',
+      likes: 7
+    }
+    const result = listHelper.mostLikes(singleBlogList)
+    expect(result).toEqual(correctResult)
+  })
+  test('from a list with many blogs should be the correct one', () => {
+    const correctResult = {
+      author: 'Edsger W. Dijkstra',
+      likes: 12
+    }
+    const result = listHelper.mostLikes(blogs)
     expect(result).toEqual(correctResult)
   })
 })

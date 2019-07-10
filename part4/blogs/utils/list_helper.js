@@ -40,16 +40,22 @@ const mostBlogs = blogs => {
       o.author === blog.author ? (o.blogs = o.blogs + 1) : o
     })
   })
-  return lastListElement(
-    _.sortBy(uniqueBlogs, blog => {
-      return blog.blogs
-    })
-  )
+  const blogToReturn = _.sortBy(uniqueBlogs, blog => {
+    return blog.blogs
+  })
+  return lastListElement(blogToReturn)
+}
+
+const mostLikes = blogs => {
+  return blogs.length === 0
+    ? { error: 'blog list is empty, try adding one' }
+    : { author: favoriteBlog(blogs).author, likes: favoriteBlog(blogs).likes }
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
