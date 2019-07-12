@@ -1,8 +1,8 @@
-POST http://localhost:3003/api/blogs
+PUT http://localhost:3003/api/blogs/5d28946a08cfd419c09966cd
 Content-Type: application/json
 
 {
-  "title": "New blog",
+  "title": "I'm awesome",
   "author": "Zirael",
   "url": "http://loremipsum.com",
   "likes": 1337
