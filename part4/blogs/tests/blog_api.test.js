@@ -62,6 +62,36 @@ test('a blog should be added correctly', async () => {
   expect(response.body.length).toBe(initialBlogs.length + 1)
 })
 
+test('adding a blog without likes property should add the blog with 0 likes', async () => {
+  const newBlog = {
+    title: 'Blog without likes',
+    author: 'Zirael',
+    url: 'http://loremipsum.com'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  const response = await api.get('/api/blogs')
+  const addedObject = response.body.filter(
+    blog => blog.title === newBlog.title
+  )[0]
+  expect(addedObject.likes).toBeDefined()
+  expect(addedObject.likes).toBe(0)
+})
+
+test('adding a blog without title and url should not work', async () => {
+  const newBlog = {
+    author: 'Una',
+    likes: 3
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(async () => {
   await Blog.deleteMany({})
   mongoose.connection.close()
