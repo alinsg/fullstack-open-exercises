@@ -70,6 +70,18 @@ describe('when there is only one user in db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
   })
+
+  test('another user with the same username cannot be created', async () => {
+    const newUser = {
+      username: 'root',
+      name: 'Doe John',
+      password: 'barfoo'
+    }
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+  })
 })
 
 afterAll(async () => {
