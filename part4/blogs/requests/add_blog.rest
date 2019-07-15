@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "New blog",
-  "author": "Zirael",
+  "title": "My second blog",
+  "author": "Alin Simion",
   "url": "http://loremipsum.com",
-  "likes": 1337
+  "likes": 2019,
+  "userId": "5d2c8be89acb992e3822dac8"
 }
